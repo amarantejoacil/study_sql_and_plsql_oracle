@@ -52,6 +52,7 @@ insert into produto (id,nome, preco, avaliacao,id_categoria) values (9,'ana Truj
 insert into produto (id,nome, preco, avaliacao,id_categoria) values (10,'Ana Trujillo Emparedados y helados', 6499.99,2,3);
 insert into produto (id,nome, preco, avaliacao,id_categoria) values (11,'Ana Trujillo Emparedados y helados', 6499.99,2,3);
 insert into produto (id,nome, preco, avaliacao,id_categoria) values (12,'ana Trujillo Emparedados y mandioca', 9499.99,4,null);
+insert into produto (id,nome, preco, avaliacao,id_categoria) values (13,'ana Trujillo Emparedados y mandioca', 91499.99,4,null);
 insert into pedido (id, num_nota, obs, id_produto) values (1, 'N1', null,1);
 insert into pedido (id, num_nota, obs, id_produto) values (2, 'N2', 'celular vendido 07/02/2023',1);
 insert into pedido (id, num_nota, obs, id_produto) values (3, 'N3', null,1);
@@ -180,7 +181,7 @@ group by avaliacao
 having avaliacao between 3 and 7
 order by avaliacao asc
 
--- EXISTS
+-- EXISTS and NOT EXISTS
 
 -- executa o comando sql se atender a condição exists, caso contrário não
 --
@@ -192,9 +193,18 @@ SELECT nome from produto where exists (
 select id from categoria where status = 'AI' 
 );
 
+--NOT EXISTS
+SELECT nome from produto where not exists (
+select id from categoria where status = 'AI' 
+);
+
 -- ANY E ALL
 
 --any
+/*
+O operador Oracle ANY é usado para comparar um valor a uma lista de valores ou conjunto de resultados retornado por uma subconsulta. 
+O seguinte ilustra a sintaxe do operador ANY quando usado com uma lista ou subconsulta:
+*/
 select prod.id, prod.nome from produto prod
 where prod.id =  any (select pedid.id from pedido pedid where pedid.obs is not null);
 
@@ -243,6 +253,48 @@ end as status
 from produto p 
 inner join categoria c 
 on p.id_categoria = c.id
+
+-- NULL FUNCTIONS
+--quando o valor é nulo substitui por outro
+
+select nome, NVL(id_categoria, 100)
+from produto
+
+SELECT
+  NVL(NULL, 'N/A')
+FROM
+  dual;
+
+-- FETCH  limita o retorno de linha
+
+select * from produto fetch next 5 rows only;
+
+--CROSS JOIN , não possui a clausula on, pois ele faz o cruzamento de dados independente
+
+select * from produto p
+inner join categoria c
+on p.id_categoria = c.id;
+
+select * from produto p
+cross join categoria c
+
+--
+
+
+select nome, preco
+from produto
+where
+preco = (
+    select
+        max(preco)
+            from
+                produto
+);
+
+
+
+
+
 
 
 
