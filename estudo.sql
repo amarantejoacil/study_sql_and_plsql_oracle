@@ -291,8 +291,16 @@ preco = (
                 produto
 );
 
+--- criando view
+
+create view vw_todos_pedidos as
+select * from pedido where obs is not null
 
 
+select * from vw_todos_pedidos
+--drop view vw_todos_pedidos
+
+--
 
 
 
