@@ -63,7 +63,9 @@ insert into pedido (id, num_nota, obs, id_produto) values (7, 'N7', 'autorizado 
 insert into pedido (id, num_nota, obs, id_produto) values (8, 'N8', 'nota 18',4);
 
 
+--SELECT 
 select * from produto;
+select * from produto where rownum <5;
 select * from categoria;
 select * from pedido;
 
