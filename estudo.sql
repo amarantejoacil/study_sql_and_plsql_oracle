@@ -53,6 +53,7 @@ insert into produto (id,nome, preco, avaliacao,id_categoria) values (10,'Ana Tru
 insert into produto (id,nome, preco, avaliacao,id_categoria) values (11,'Ana Trujillo Emparedados y helados', 6499.99,2,3);
 insert into produto (id,nome, preco, avaliacao,id_categoria) values (12,'ana Trujillo Emparedados y mandioca', 9499.99,4,null);
 insert into produto (id,nome, preco, avaliacao,id_categoria) values (13,'ana Trujillo Emparedados y mandioca', 91499.99,4,null);
+insert into produto (id,nome, preco, avaliacao,id_categoria) values (14,'ps4', 2499.99,4,2);
 insert into pedido (id, num_nota, obs, id_produto) values (1, 'N1', null,1);
 insert into pedido (id, num_nota, obs, id_produto) values (2, 'N2', 'celular vendido 07/02/2023',1);
 insert into pedido (id, num_nota, obs, id_produto) values (3, 'N3', null,1);
@@ -66,6 +67,7 @@ insert into pedido (id, num_nota, obs, id_produto) values (8, 'N8', 'nota 18',4)
 --SELECT 
 select * from produto;
 select * from produto where rownum <5;
+select distinct nome,preco from produto where rownum <5;
 select * from categoria;
 select * from pedido;
 
