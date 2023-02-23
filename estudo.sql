@@ -387,12 +387,18 @@ select nome, replace(nome, 'Emparedados', 'JOACIL') from produto;
 --SYSDATE hora e o dia do momento
 --TRUNC converte apenas para data de forma inteira... sem representação de horas
 -- ROUND arredondar a data
+--EXTRACT extrair parte da data
 
 
 select sysdate from dual;--23/02/23
 select to_char(sysdate, 'DD/MM/YYYY HH:MI:SS') from dual; --23/02/2023 11:06:59
 select to_char(sysdate, 'DD month YYYY day') from dual; --23 fevereiro 2023 quinta-feira 
 select sysdate + 127 from dual; -- dia atual + 127 dias
+
+--extract
+select extract(month from to_date('25/02/2023', 'DD/MM/YYYY')) from dual;
+select extract(year from to_date('25/02/2023', 'DD/MM/YYYY')) from dual;
+select extract(day from to_date('25/02/2023', 'DD/MM/YYYY')) from dual;
 
 
 select 3.4 from dual;
@@ -410,24 +416,12 @@ select SQRT(144) from dual;
 
 
 
+-- CONVERSÕES
 
+select to_char(1234.123, '9999') from dual; -- result: 1234
+select to_char(1234.123, '009999') from dual; -- result: 001234
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+--NVL ser for null transforma em algo
+select nome, NVL(id_categoria, 1000000) from produto
 
 
