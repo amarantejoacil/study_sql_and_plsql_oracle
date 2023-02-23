@@ -1,7 +1,9 @@
-drop table pedido;
-drop table produto;
-drop table categoria;
+DROP TABLE pedido;
 
+DROP TABLE produto;
+
+DROP TABLE categoria;
+commit
 
 CREATE TABLE produto (
     id   numeric,
@@ -95,6 +97,12 @@ select preco from produto where preco between 1000 and 2500;
 select id as codigo, preco as valor_cadastrado from produto;
 
 -- inener join traz todos valores que corresponde nas duas tabelas
+
+select * from produto;
+select * from categoria;
+
+--tabela esquerda depois do FROM, tabela direita depois da clausula inner
+
 select * from produto prod 
 inner join categoria cat ON
 prod.id_categoria = cat.id
@@ -118,14 +126,27 @@ select * from produto prod
 full outer join categoria cat on
 prod.id_categoria = cat.id;
 
+
+--CROSS JOIN , não possui a clausula on, pois ele faz o cruzamento de dados independente
+--combina os resultados ex: dado 1 da esquerda com todos dados da direita 
+select * from produto p
+inner join categoria c
+on p.id_categoria = c.id;
+
+select * from produto p
+cross join categoria c
+
+
 --
 
 select * from categoria;
 select * from produto;
 
 --UNION , UNION ALL - PERMITE UNIFICAR TABELAS COM CARACTERISTICAS PARECIDAS EX: NÚMERO DE COLUNAS
+-- unir dados de diferentes tabelas respeitando as caracteristicas e tipos.
+-- ex: unir nome e telefone da tabela cliente com nome e telefone databela fornecedor... tudo em uma unica lista
 select p.nome as p_nome, p.id_categoria as p_categoria from produto p 
-union all select categoria_descricao, id from categoria c where c.id in (1,2);
+union all select c.categoria_descricao, c.id from categoria c where c.id in (1,2);
 
 --union com distinct
 select distinct nome from produto where avaliacao = 3
@@ -149,8 +170,10 @@ select * from produto;
 select * from categoria;
 select count(*) from produto group by avaliacao
 
-select avaliacao, count(*) from produto p group by avaliacao
+select avaliacao,sum(avaliacao) from produto p group by avaliacao;
+select avaliacao,avg(avaliacao) from produto p group by avaliacao order by avaliacao desc;
 
+select avaliacao, count(*) from produto p group by avaliacao
 
 -- quantitativo de categoria na tabela de produto usando INNER JOIN, somente as categorias que tem relação
 select p.id_categoria, count(*) from produto p 
@@ -258,6 +281,17 @@ from produto p
 inner join categoria c 
 on p.id_categoria = c.id
 
+
+
+select preco,
+case 
+    when preco < 3000 then 'barato'
+    else 'caro'
+end as resultado
+from produto order by resultado asc;
+
+
+
 -- NULL FUNCTIONS
 --quando o valor é nulo substitui por outro
 
@@ -273,14 +307,7 @@ FROM
 
 select * from produto fetch next 5 rows only;
 
---CROSS JOIN , não possui a clausula on, pois ele faz o cruzamento de dados independente
-
-select * from produto p
-inner join categoria c
-on p.id_categoria = c.id;
-
-select * from produto p
-cross join categoria c
+select * from produto where rownum < 5;
 
 --
 
@@ -298,13 +325,100 @@ preco = (
 --- criando view
 
 create view vw_todos_pedidos as
-select * from pedido where obs is not null
-
-
-select * from vw_todos_pedidos
+select * from pedido where obs is not null SELECT
+    *
+FROM
+    vw_todos_pedidos
 --drop view vw_todos_pedidos
 
---
+-- IN
+
+--usa o resultado do select dentro do IN
+
+select * from produto where id in (select id from categoria where status = 'I');
+
+--exemplo 2: passando como filtro toda as categoria e listando os produtos
+select * from produto where id_categoria in (select id from categoria);
+
+--mesmo resultado que inner join
+select * from produto p
+inner join categoria c
+on p.id_categoria = c.id;
+
+
+--FUNÇÃO e FUNÇÕES
+
+select * from produto;
+select lower(nome) from produto;
+select upper(nome) from produto;
+select initcap(nome) from produto;-- letra da cada palavra maiscula
+
+--CONCAT
+select nome || ' ' || preco from produto; --alternativa ao invés de usar varios concat
+select concat(nome, preco) from produto;
+select concat(concat(nome, ' - '),preco) from produto;
+
+-- LTRIN - retira espaço da esquerda
+-- RTRIN - retira espaço da direita
+-- TRIM - tira esquerda e direita
+select ltrim(nome) from produto where id = 5;
+
+--SUBSTR
+--substr(nome,1,10) = substr(PARAMETRO,INICIO,FIM)
+select nome, substr(nome,1,10) from produto;
+
+--INSTR
+-- retorna em qual posição encontro o parametro passado
+-- se retornar zero não existe
+select nome, instr(nome, 'y') from produto;
+
+--todos registro q tem Y OU PARAMETRO PASSADO
+select nome from produto where instr(nome, 'y') <> 0;
+
+--REPLACE
+--substituindo texto
+select nome, replace(nome, 'Emparedados', 'JOACIL') from produto;
+
+
+--FUNÇÕES DATAS
+
+--TO_CHAR pega data e converte em texto
+--TO_DATE pega o texto e converte em data
+--SYSDATE hora e o dia do momento
+--TRUNC converte apenas para data de forma inteira... sem representação de horas
+-- ROUND arredondar a data
+
+
+select sysdate from dual;--23/02/23
+select to_char(sysdate, 'DD/MM/YYYY HH:MI:SS') from dual; --23/02/2023 11:06:59
+select to_char(sysdate, 'DD month YYYY day') from dual; --23 fevereiro 2023 quinta-feira 
+select sysdate + 127 from dual; -- dia atual + 127 dias
+
+
+select 3.4 from dual;
+select round(3.4) from dual;
+select round(3.5) from dual;
+
+select trunc(3.4) from dual;
+select trunc(3.9) from dual;
+
+--10 elevado a 4 = 10x10x10x10 =10000
+select power(10,4) from dual;
+
+--raiz quadradra de 144
+select SQRT(144) from dual;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
